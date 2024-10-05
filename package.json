@@ -1,0 +1,74 @@
+{
+  "name": "proyectob2bmirkocubointerfaz",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^5.4.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.0.0",
+    "@mui/material": "^6.0.0",
+    "@syncfusion/ej2-base": "24.1.42",
+    "@syncfusion/ej2-buttons": "24.1.45",
+    "@syncfusion/ej2-calendars": "24.1.44",
+    "@syncfusion/ej2-charts": "24.1.45",
+    "@syncfusion/ej2-compression": "24.1.41",
+    "@syncfusion/ej2-data": "24.1.41",
+    "@syncfusion/ej2-documenteditor": "24.1.45",
+    "@syncfusion/ej2-dropdowns": "24.1.45",
+    "@syncfusion/ej2-excel-export": "24.1.41",
+    "@syncfusion/ej2-file-utils": "24.1.41",
+    "@syncfusion/ej2-grids": "24.1.45",
+    "@syncfusion/ej2-icons": "24.1.41",
+    "@syncfusion/ej2-inputs": "24.1.45",
+    "@syncfusion/ej2-lists": "24.1.41",
+    "@syncfusion/ej2-navigations": "24.1.41",
+    "@syncfusion/ej2-notifications": "24.1.41",
+    "@syncfusion/ej2-pdf-export": "24.1.41",
+    "@syncfusion/ej2-pivotview": "24.1.45",
+    "@syncfusion/ej2-popups": "24.1.44",
+    "@syncfusion/ej2-react-base": "^24.1.41",
+    "@syncfusion/ej2-react-charts": "24.1.45",
+    "@syncfusion/ej2-react-pivotview": "24.1.45",
+    "@syncfusion/ej2-react-popups": "24.1.44",
+    "@syncfusion/ej2-react-spreadsheet": "^22.2.9",
+    "@syncfusion/ej2-splitbuttons": "24.1.45",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.20.3",
+    "axios": "^1.7.7",
+    "react": "^18.3.1",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18.3.1",
+    "react-grid-layout": "^1.4.4",
+    "react-icons": "^5.3.0",
+    "react-scripts": "5.0.1",
+    "uuid": "^10.0.0",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

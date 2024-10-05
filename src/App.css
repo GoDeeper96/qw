@@ -1,0 +1,19 @@
+/* .resizable {
+    width: 200px;
+    resize: horizontal;
+    overflow: auto;
+    cursor: ew-resize;
+  } */
+  /* .custom-resizable-box {
+    position: relative;
+  }
+  
+  .custom-handle {
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    cursor: ew-resize; 
+    background-color: #ccc;
+  } */
