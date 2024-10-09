@@ -1,11 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
-import { Layout, Modal, notification, Segmented, Space, Spin, Typography } from 'antd';
+import { Layout, message, Modal, notification, Segmented, Space, Spin, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { ArrowLeftOutlined, ArrowRightOutlined, BarChart, EditOutlined, Filter2Outlined, FilterAltOutlined, FilterOutlined, KeyboardArrowLeftOutlined, KeyboardArrowRightOutlined, List, ListAltRounded, RefreshOutlined, SearchOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { IoArrowUndoSharp } from "react-icons/io5";
 import { IoArrowUndo } from "react-icons/io5";
+import { CgDuplicate } from "react-icons/cg";
+import { PivotViewComponent } from '@syncfusion/ej2-react-pivotview';
+
 import { IoArrowRedo } from "react-icons/io5";
 import { DragDropContext,Droppable,Draggable } from 'react-beautiful-dnd'
 import { v4 as uuidv4 } from 'uuid';
@@ -18,13 +21,18 @@ import { ResizableBox } from 'react-resizable';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { useEffect, useState } from 'react';
+import React,{ useEffect, useRef, useState } from 'react';
 import { ExGraficos } from './data/EjemploGraficos';
 import CubitoSync from './components/CuboSyncfusion';
 import DropDrag from './components/WrapperReactGrid';
 import TituloSecundario1 from './components/TituloSecundario1';
 import { setValue } from '@syncfusion/ej2-base';
 import axios from 'axios';
+import { MdOutlineDragIndicator } from "react-icons/md";
+
+
+
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const RertornarDestino = (destino)=>{
   if(destino.includes('PanelFiltros'))
     {
@@ -401,25 +409,56 @@ const onDragEndToPanelGrafico = (result,
   }
 }
 };
-
+const defaultCols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
+const rowHeight = 100;
+const NormalCube = React.forwardRef((props, ref) => {
+  return (
+      <PivotViewComponent 
+          id='PivotView' 
+          dataSourceSettings={props.dataSourceSettings} 
+          ref={ref}
+          height={props.height}
+          width={props.width}
+      />
+  );
+});
 function App() {
+  const pivotRefs = useRef([]);
   const [api, contextHolder] = notification.useNotification();
-  const [items, setItems] = useState([
-    { id: 'item1', content: 'Item 1' },
-    { id: 'item2', content: 'Item 2' },
-    { id: 'item3', content: 'Item 3' },
-  ])
+ // Estado inicial para items y el contador
+ const [items, setItems] = useState(
+  [0, 1, 2, 3, 4].map((i, key, list) => ({
+    i: i.toString(),
+    x: i * 2,
+    y: 0,
+    w: 3.5,
+    h: 3.5,
+    
+    minW:  3.5, 
+    minH:  3.5 ,
+    add: i === list.length - 1,
+  }))
+);
+const [cubosDimension, setCubosDimension] = useState(
+  items.map(item => ({ i: item.i, width: item.w * 100, height: item.h * 50 }))
+);
+const [newCounter, setNewCounter] = useState(0);
+
+
+const [cols, setCols] = useState(defaultCols);
   // const [FiltrosPanel,setFiltrosPanel] = useState({})
   const [Columnas,setColumnas] = useState({})
-  const [Graficos,setGraficos] = useState({})
-  const [PanelGraficos,setPanelGraficos] = useState({})
+  // const [Graficos,setGraficos] = useState(ExGraficos)
+  const [PanelGraficos,setPanelGraficos] = useState([])
   const [DatosCalculo,SetDatosCalculo] = useState([])
   const [loading,SetLoading] = useState(false)
   const [PanelFilas,SetPanelFilas] = useState({})
+  const [layout, setLayout] = useState([]);
   const [PanelFiltros,SetPanelFiltros] = useState({})
   const [PanelColumnas,SetPanelColumnas] = useState({})
   const [ModalLoading,SetModalLoading] = useState(false)
   const [PanelValores,SetPanelValores] = useState({})
+  
   const [valueSegmentedfx1, setValuevalueSegmentedfx1] = useState('Editor');
   const [FiltrosOpened,setFiltrosOpened] = useState(false)
   const openNotificationWithIcon = (type,msg,desc) => {
@@ -429,6 +468,114 @@ function App() {
       description:desc
     });
   };
+  const onLayoutChange = (newLayout) => {
+    console.log(newLayout);
+  
+    // Actualiza el estado de items con los nuevos valores del layout
+    const updatedItems = items.map(item => {
+      const layoutItem = newLayout.find(l => l.i === item.i);
+      return layoutItem
+        ? {
+            ...item,
+            x: layoutItem.x,
+            y: layoutItem.y,
+            w: layoutItem.w,
+            h: layoutItem.h,
+          }
+        : item; // Si no encuentra el item en el layout, deja el item sin cambios
+    });
+    console.log('ACTUALIZADO')
+    console.log(updatedItems)
+    setItems(updatedItems);  // Actualiza los items con los nuevos valores
+   
+  };
+
+
+ // Función para remover un elemento
+//  const onRemoveItem = (i) => {
+//   console.log("removing", i);
+//   setItems(_.reject(items, { i: i }));
+// };
+const onRemoveItem = (i) => {
+  console.log("removing", i);
+  setItems(items.filter(item => item.i !== i));
+};
+const createElement = (el,index) => {
+  const removeStyle = {
+    position: "absolute",
+    right: "2px",
+    top: 0,
+    cursor: "pointer"
+  };
+  const i =  el.i;
+  const cubeWidth = el.w * 100; // Por ejemplo, multiplicamos por 50 para ajustar el tamaño de forma visible
+  const cubeHeight = el.h * 100;
+  console.log(el.w)
+  console.log(el.h)
+  console.log(cubeHeight)
+  console.log(cubeWidth)
+  return (
+    <div key={i} data-grid={el} 
+
+    >
+      
+        <IconButton
+          className="add text"
+          onClick={onAddItem}
+         
+        >
+          
+          <CgDuplicate />
+  
+        </IconButton>
+      
+      <span
+        className="remove"
+        style={removeStyle}
+        onClick={() => onRemoveItem(i)}
+      >
+        x
+      </span>
+      <IconButton  className='react-grid-dragHandleExample'>
+        <MdOutlineDragIndicator/>
+      </IconButton>
+     {/* <NormalCube
+        ref={(ref) => pivotRefs.current[index] = ref}
+     dataSourceSettings = {DatosCalculo}
+     height={`${dimensions.height}px`}
+     width={`100%`}
+     /> */}
+      <PivotViewComponent 
+          id='PivotView' 
+          dataSourceSettings={DatosCalculo} 
+          height={`${cubeHeight}px`}  // Aplica la altura calculada
+          width={`${cubeWidth}px`}  
+      />
+    </div>
+  );
+};
+// Cambia las columnas según el punto de quiebre (breakpoint)
+const onBreakpointChange = (breakpoint, cols) => {
+  setCols(cols);
+};
+const onAddItem = () => {
+  console.log("adding", "n" + newCounter);
+  setItems([
+    ...items,
+    {
+      i: "n" + newCounter,
+      x: (items.length * 2) % (cols || 12),
+      y: Infinity, // lo pone al final
+      w: 3.5,
+      h: 3.5,
+      
+      minW:  3.5, 
+      minH:  3.5 ,
+      
+    }
+  ]);
+  setNewCounter(newCounter + 1); // Aumenta el contador
+};
   const fetchColumnas = async() =>
   {
     let array = {
@@ -517,54 +664,54 @@ function App() {
       console.log(error)
     }
   }
-  const fetchPanelGraficos = async()=>{
-    try {
-      let array = {
-        [uuidv4()+'PanelGraficos']: {
-          name: "PanelGraficos",
-          items: []
-        }
-      }
-      setPanelGraficos(array)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  const fetchGraficos = async() =>
-    {
-      let array = {
-        [uuidv4()+'Graficos']: {
-          name: "Graficos",
-          items: []
-        }
-      }
-      try {
-        for(const key in array){
-          // console.log(firstDataObject[key])
-          for(let element of ExGraficos){
+  // const fetchPanelGraficos = async()=>{
+  //   try {
+  //     let array = {
+  //       [uuidv4()+'PanelGraficos']: {
+  //         name: "PanelGraficos",
+  //         items: []
+  //       }
+  //     }
+  //     setPanelGraficos(array)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  // const fetchGraficos = async() =>
+  //   {
+  //     let array = {
+  //       [uuidv4()+'Graficos']: {
+  //         name: "Graficos",
+  //         items: []
+  //       }
+  //     }
+  //     try {
+  //       for(const key in array){
+  //         // console.log(firstDataObject[key])
+  //         for(let element of ExGraficos){
             
-              array[key].items.push({
-                   id:uuidv4(),
-                   ...element
-              })
+  //             array[key].items.push({
+  //                  id:uuidv4(),
+  //                  ...element
+  //             })
             
-          }
-        }
-        console.log(array)
-        setGraficos(array)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  
+  //         }
+  //       }
+  //       console.log(array)
+  //       setGraficos(array)
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
+ 
   useEffect(() => {
     fetchPanelColumnas()
     fetchPanelFilas()
     fetchPanelFiltros()
     fetchPanelValores()
-    fetchPanelGraficos()
+    // fetchPanelGraficos()
     fetchColumnas()
-    fetchGraficos()
+    // fetchGraficos()
   }, [])
   useEffect(() => {
   
@@ -881,7 +1028,7 @@ function App() {
         
         {/* PANEL DE CUBO */}
         
-        <div className='col'
+        <div className='col '
          style={{background:'#e8edf7',maxWidth:'13rem',borderRightWidth:'1px',borderColor:'#adadad'}}
         >
           <div >
@@ -1198,252 +1345,78 @@ function App() {
             </div>
         </div>
         </DragDropContext>
-        <DragDropContext
-      onDragEnd={result => onDragEndToPanelGrafico(result, Graficos,PanelGraficos,setPanelGraficos, setGraficos,openNotificationWithIcon)}
-      >
-         {/* PANEL DE GRAFICOS */}
-        <div className='col mt-2'>
-          {/* <CubitoSync/> */}
-        {Object.entries(PanelGraficos).map(([columnId, column],
-         index) => {
-          return (
-            
-              
-            <div 
-         
-            key={columnId}>
-                <div style={{ margin: 8 }}>
-                <Droppable 
-                droppableId={columnId} 
-                key={columnId}  
-                index={index}>
-                  {(provided, snapshot) => {
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                          // background: snapshot.isDraggingOver
-                          //   ? "#f1f1f1"
-                          //   : "#dcefff",
+        <div className=' col flex-lg-1 h-screen  overflow-y-lg-auto' style={{
+                       
                           padding: 10,
-                          width: '100%',
-                          // minHeight:200,
-                          // maxHeight: 200,
-                          borderRadius:2
-                        }}
-                        className='h-screen overflow-y-lg-auto'
-                      >
-                        {column.items.map((item,index)=>{
-                          return (<div
-                              className='col'
-                            key={index} 
-                          >
-                           <CubitoSync  
-                           loading={loading}
-                               dataSourceSettings={DatosCalculo}/>
-                          </div>)
-                        })}
-                        {/* <DropDrag>
-                      {column.items.map((item,index)=>{
-                        return (
-                          <div
-                          // key={item.id}
-                          key={index} 
-                          data-grid={
-                            { 
-                              // w: 2, 
-                              // h: 2, 
-                              // x: index * 2 % 12, 
-                              // y: 0, 
-                              w: 5,  // Anchura en columnas
-                              h: 2,  // Altura en filas
-                              x: (index % 2) * 5, // Posición horizontal
-                              y: Math.floor(index / 2) * 2, // Posición vertical
-                              i: index.toString() 
-                            
-                            }}
-                          className='col'
-                          style={{
-                            userSelect: "none",
-                            padding: 1,
-                            margin: 3,
-                            color: '#0d4178',
-                          }}
-                        >
-                          <CubitoSync />
-                        </div>
-                            // <Draggable
-                            // draggableId={item.id} 
-                            // key={item.id} 
-                            // index={index}
-                            // // data-grid={
-                            // //   { 
-                            // //     // w: 2, 
-                            // //     // h: 2, 
-                            // //     // x: index * 2 % 12, 
-                            // //     // y: 0, 
-                            // //     w: 5,  // Anchura en columnas
-                            // //     h: 2,  // Altura en filas
-                            // //     x: (index % 2) * 5, // Posición horizontal
-                            // //     y: Math.floor(index / 2) * 2, // Posición vertical
-                            // //     i: index.toString() 
-                              
-                            // //   }}
-                            //   >
-                            //     {(provided,snapshot)=>{
-                            //       return(
-                                      
-                            //         <div
-                            //         className='col'
-                            //         ref={provided.innerRef}
-                            //         {...provided.draggableProps}
-                            //         {...provided.dragHandleProps}
-                            //         style={{
-                            //           userSelect: "none",
-                            //           padding: 1,
-                            //           margin:3,
-                            //           // borderRadius:2,
-                            //           // fontSize:'14px',
-                            //           color:'#0d4178',
-                                      
-                            //           // fontWeight:500,
-                            //           // borderBottomWidth:'0.2px',
-                            //           // borderColor:'#a8a8a8',
-                            //           // backgroundColor:'#ffffff',
-                            //           // backgroundColor: snapshot.isDragging
-                            //           //   ? "#263B4A"
-                            //           //   : "black",
-                            //           // color: "white",
-                            //           ...provided.draggableProps.style
-                            //         }}
-                            //         >
-                                    
-                            //               <CubitoSync />
-                            //         </div>
-                            //       )
-                            //     }}
-                            
-                            // </Draggable>
-                             )
-                        })}
-                     </DropDrag> */}
-                        
-                        {provided.placeholder}
-                      </div>
-                    );
-                  }}
-                </Droppable>
-                </div>
-            </div>
-        
-          );
-        })}
-        </div>
-           {/* GRAFICOS */}     
-        <div className='col px-0 aling-items-center justify-content-center'
-        style={{background:'#e8edf7',maxWidth:'14rem',borderLeftWidth:'1px',borderColor:'#adadad'}}
-        >
-          <div className='d-flex col aling-items-center justify-content-center mt-2'>
-            <IconButton style={{padding:'1px',marginRight:'16px'}} >
-              <FaChartBar size={14}/>
-            </IconButton>
-            <TituloBarra1>Galeria</TituloBarra1>
-            </div>
-            <p>Integrado</p>
-            <div 
-            // className='flex-lg-1 h-screen  overflow-y-lg-auto  ' 
-            style={{
-                          background: "#e8edf7",
-                          padding: 10,
-                          // width: 'auto',
+                          width: 'auto',
 
-                          // maxHeight:'84vh',
+                          maxHeight:'84vh',
                           borderRadius:5
-                        }}
-                        >
-                  {Object.entries(Graficos).map(([columnId,column],index)=>{
+                        }}>
+       
+            <ResponsiveReactGridLayout
+                  draggableHandle=".react-grid-dragHandleExample"
+             onLayoutChange={onLayoutChange}
+             onBreakpointChange={onBreakpointChange}
+       
+             className="layout"
+             cols={defaultCols}
+             rowHeight={rowHeight}
+            >
+             {items.map((el, index) => createElement(el,index))}
+            </ResponsiveReactGridLayout>
+          
+        </div>
+        <div className='col px-0 aling-items-center justify-content-center'
+        style={{background:'#e8edf7',maxWidth:'14rem',borderLeftWidth:'1px',borderColor:'#adadad'}}>
+   <div className='d-flex col aling-items-center justify-content-center mt-2'>
+        <IconButton style={{padding:'1px',marginRight:'16px'}} >
+           <FaChartBar size={14}/>
+          </IconButton>
+          <TituloBarra1>Galeria</TituloBarra1>
+           </div>
+         <p>Integrado</p>
+          <div 
+         className='flex-lg-1 h-screen  overflow-y-lg-auto  ' 
+          style={{
+                       background: "#e8edf7",
+                      padding: 10,
+                        // width: 'auto',
 
-                    return(
-                      <Droppable
-                      droppableId={columnId} 
-                      key={columnId}  
-                      index={index}
-                      >
-                        {(provided,snapshot)=>{
-                          return(
-                            <div
-                            className='row row-cols-4 d-flex justify-content-center align-items-center'
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                            style={{
-                              // background: snapshot.isDraggingOver
-                              //   ? "#A29D9D"
-                              //   : "lightgrey",
-                             
-                            
-                              borderRadius:2
-                            }}
+                       // maxHeight:'84vh',
+                       borderRadius:5
+                      }}
+                   >
+                    <div className='row row-cols-4 d-flex justify-content-center align-items-center p-2'>
+
+                   
+               {ExGraficos.map(x=>{return (
+                <IconButton style={{padding:0,borderRadius:1}} onClick={()=>{onAddItem(x.name)}}>
+                <div
+              
+                className='col justify-content-center align-items-center d-flex'
+                style={{
+                                                        userSelect: "none",
+                                                        padding: 1,
+                                                        margin:3,
+                                                        borderRadius:1,
+                                                        fontSize:'14px',
+                                                        color:'#0d4178',
+                                                        
+                                                        fontWeight:500,
+                                                        borderBottomWidth:'0.2px',
+                                                        borderColor:'#a8a8a8',
+                                                        backgroundColor:'#ffffff',
+                                                    
+                                                      }}
+                >{x.icono}
+                </div>
+                </IconButton>
+              
+               )})}     </div>
                 
-                            >
-                              {
-                                column.items.map((item,index)=>{
-                                  return(
-                                    <Draggable
-                                    key={item.id}
-                                    draggableId={item.id}
-                                    index={index}
-                                    >
-                                      {(provided, snapshot)=>{
-                                        return(
-                                        
-                                          <div
-                                          className='col justify-content-center align-items-center d-flex'
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                          style={{
-                                            userSelect: "none",
-                                            padding: 1,
-                                            margin:3,
-                                            borderRadius:4,
-                                            fontSize:'14px',
-                                            color:'#0d4178',
-                                            
-                                            fontWeight:500,
-                                            borderBottomWidth:'0.2px',
-                                            borderColor:'#a8a8a8',
-                                            backgroundColor:'#ffffff',
-                                            // backgroundColor: snapshot.isDragging
-                                            //   ? "#263B4A"
-                                            //   : "black",
-                                            // color: "white",
-                                            ...provided.draggableProps.style
-                                          }}
-                                          >
-
-                                            {item.icono}
-                                      
-                                          </div>
-                                          
-                                        )
-                                      }}
-                                    </Draggable>
-                                  )
-                                })}
-                                {provided.placeholder}
-                            </div>
-                          )
-                        }}
-                      </Droppable>
-                    )
-                  })
-                  }
-
             </div>
- 
-            </div>     
-            </DragDropContext>
+        </div>
       </div>
   
     </div>  
