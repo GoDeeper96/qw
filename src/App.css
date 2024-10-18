@@ -17,3 +17,57 @@
     cursor: ew-resize; 
     background-color: #ccc;
   } */
+   svg{
+    width: 100%;
+   }
+   div{
+    scrollbar-width: thin;
+    scrollbar-color: 'unset';
+  
+   }
+  :where(.css-dev-only-do-not-override-vryruh).ant-collapse-ghost >.ant-collapse-item >.ant-collapse-content >.ant-collapse-content-box {
+    padding-block: 0px;
+}
+:where(.css-dev-only-do-not-override-vryruh).ant-collapse .ant-collapse-content>.ant-collapse-content-box {
+  padding: 0px;
+}
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .container-fluid {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .overflow-auto {
+    overflow-y: auto;
+  }
+  
+  .flex-grow-1 {
+    flex-grow: 1;
+  }
+  
+  .table-responsive {
+    max-height: 50%; /* Ajusta el tamaño de la tabla */
+    overflow-y: auto;
+  }  
+
+  /* Estilo para el header del panel cuando está activo */
+/* .active-panel .ant-collapse-header {
+  background-color: #5140ee; 
+  color: #5e18cd;
+} */
+
+/* Hover normal */
+/* .ant-collapse-header:hover {
+  background-color: #bb0303; 
+} */
+
+/* Hover activo cuando está expandido */
+/* .active-panel .ant-collapse-header:hover {
+  background-color: #ef7a3fed; 
+} */
