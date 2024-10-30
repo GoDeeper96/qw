@@ -755,7 +755,9 @@ const onAddItem = () => {
         console.log(filtrositems);
       }
       console.log(Object.keys(valoresitems).length)
-      if(filasitems.length!==0&&columnasitems.length!==0&&Object.keys(valoresitems).length!==0)
+      if(filasitems.length!==0&&
+        columnasitems.length!==0&&
+        Object.keys(valoresitems).length!==0)
         {
           SetModalLoading(true)
           SetLoading(true)

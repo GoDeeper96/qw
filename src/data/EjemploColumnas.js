@@ -1,19 +1,12 @@
 export const ColumnasCubo = [
-    {
-        label:'Anio(Agrupar)',
-        name:'Anio',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-
-    },
+  
     {
         label:'Periodo',
         name:'Periodo',
-        TipoConjuntoDatos:'Atributo',
+        TipoConjuntoDatos:'Original',
+        TipoDato:'String',
         EsFuncion:false,
+        Mutable:true,
         Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
@@ -21,8 +14,273 @@ export const ColumnasCubo = [
     {
         label:'Sucursal',
         name:'Sucursal',
-        TipoConjuntoDatos:'Atributo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'ProductoDescripcion',
+        name:'ProductoDescripcion',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'ProductoCodigo',
+        name:'ProductoCodigo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'EsBonificacion',
+        name:'EsBonificacion',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:false, //es 0 o 1
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'IDCaracteristica4',
+        name:'IDCaracteristica4',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'GrupoVentas',
+        name:'GrupoVentas',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'SubProveedor',
+        name:'SubProveedor',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'ClienteCodigo',
+        name:'ClienteCodigo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'ClienteNombre',
+        name:'ClienteNombre',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'Fecha',
+        name:'Fecha',
+        TipoDato:'Date',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:false,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'Nombre',
+        name:'Nombre',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'NomVen',
+        name:'NomVen',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'VendedorCodigo',
+        name:'VendedorCodigo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'NroDocSupervisor',
+        name:'NroDocSupervisor',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'CodSupervisor',
+        name:'CodSupervisor',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'Distrito',
+        name:'Distrito',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'EAN13',
+        name:'EAN13',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'CodigoFabrica',
+        name:'CodigoFabrica',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'JefeVentas',
+        name:'JefeVentas',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'Pedido',
+        name:'Pedido',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'BloqueNegocio',
+        name:'BloqueNegocio',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'Zona',
+        name:'Zona',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'EstadoCliente',
+        name:'EstadoCliente',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'GiroCliente',
+        name:'GiroCliente',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
+        Tabla:'CuboProyeccion',
+        TablaLabel:'Cubo Proyeccion',
+        Origen:'ColumnasCubos'
+    },
+    {
+        label:'TipoVentas',
+        name:'TipoVentas',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
+        EsFuncion:false,
+        Mutable:true,
         Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
@@ -30,610 +288,171 @@ export const ColumnasCubo = [
     {
         label:'Bloque',
         name:'Bloque',
-        TipoConjuntoDatos:'Atributo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
+        Mutable:true,
         Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
     },
-    {
-        label:'BN',
-        name:'BN',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
+
     {
         label:'Canal',
         name:'Canal',
-        TipoConjuntoDatos:'Atributo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
+        Mutable:true,
         Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
     },
     {
         label:'Fuerza Venta',
-        name:'FuerzaVenta',
-        TipoConjuntoDatos:'Atributo',
+        name:'FuerzaVentas',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Fuerza Venta(agrupar)',
-        name:'FuerzaVentaAgrupacion',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'FV',
-        name:'FV',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'JV',
-        name:'JV',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'JVS',
-        name:'JVs',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Linea',
-        name:'linea',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Marca',
-        name:'Marca',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Mes',
-        name:'Mes',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Mes Anio',
-        name:'MesAnio',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'PROV x %Part',
-        name:'PROVxPart',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Proveedor',
-        name:'Proveedor',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Proveedor Comercial',
-        name:'ProveedorComercial',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Proveedores',
-        name:'Proveedores',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SubCanal',
-        name:'SubCanal',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SUC',
-        name:'SUC',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SUCS',
-        name:'SUCS',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SUP',
-        name:'SUP',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Trimestre',
-        name:'Trimestre',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Trimestre Anio',
-        name:'TrimestreAnio',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'VEND',
-        name:'VEND',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'% Py',
-        name:'PY',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'2019',
-        name:'2019',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'2020',
-        name:'2020',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'2021',
-        name:'2021',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Cuota',
-        name:'Cuota',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Index',
-        name:'Index',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Proyeccion',
-        name:'Proyeccion',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Recuento de Filas',
-        name:'RecuentoFilas',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Venta',
-        name:'ValorVenta',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
+        Mutable:true,
         Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
     },
     
-
-
-
-
-
-    {
-        label:'Anio(Agrupar)',
-        name:'Anio',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Periodo',
-        name:'Periodo',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Sucursal',
-        name:'Sucursal',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Bloque',
-        name:'Bloque',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'BN',
-        name:'BN',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Canal',
-        name:'Canal',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Fuerza Venta',
-        name:'FuerzaVenta',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Fuerza Venta(agrupar)',
-        name:'FuerzaVentaAgrupacion',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'FV',
-        name:'FV',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'JV',
-        name:'JV',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'JVS',
-        name:'JVs',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
     {
         label:'Linea',
         name:'linea',
-        TipoConjuntoDatos:'Atributo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
-        Tabla:'CuboProyeccion21',
+        Mutable:true,
+        Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
     },
     {
         label:'Marca',
         name:'Marca',
-        TipoConjuntoDatos:'Atributo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
-        Tabla:'CuboProyeccion21',
+        Mutable:true,
+        Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
     },
     {
         label:'Mes',
         name:'Mes',
-        TipoConjuntoDatos:'Atributo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
-        Tabla:'CuboProyeccion21',
+        Mutable:true,
+        Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
     },
-    {
-        label:'Mes Anio',
-        name:'MesAnio',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'PROV x %Part',
-        name:'PROVxPart',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
+   
     {
         label:'Proveedor',
         name:'Proveedor',
-        TipoConjuntoDatos:'Atributo',
+        TipoDato:'String',
+        TipoConjuntoDatos:'Original',
         EsFuncion:false,
-        Tabla:'CuboProyeccion21',
+        Mutable:true,
+        Tabla:'CuboProyeccion',
         TablaLabel:'Cubo Proyeccion',
         Origen:'ColumnasCubos'
     },
-    {
-        label:'Proveedor Comercial',
-        name:'ProveedorComercial',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Proveedores',
-        name:'Proveedores',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SubCanal',
-        name:'SubCanal',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SUC',
-        name:'SUC',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SUCS',
-        name:'SUCS',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'SUP',
-        name:'SUP',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Trimestre',
-        name:'Trimestre',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Trimestre Anio',
-        name:'TrimestreAnio',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'VEND',
-        name:'VEND',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'% Py',
-        name:'PY',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'2019',
-        name:'2019',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'2020',
-        name:'2020',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'2021',
-        name:'2021',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Cuota',
-        name:'Cuota',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Index',
-        name:'Index',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Proyeccion',
-        name:'Proyeccion',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Recuento de Filas',
-        name:'RecuentoFilas',
-        TipoConjuntoDatos:'Indicador',
-        EsFuncion:true,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
-    {
-        label:'Venta',
-        name:'ValorVenta',
-        TipoConjuntoDatos:'Atributo',
-        EsFuncion:false,
-        Tabla:'CuboProyeccion21',
-        TablaLabel:'Cubo Proyeccion',
-        Origen:'ColumnasCubos'
-    },
+  /////////////////////////////////NUMBERS
+  {
+    label:'ValorVenta',
+    name:'ValorVenta',
+    TipoDato:'Number',
+    TipoConjuntoDatos:'Original',
+    EsFuncion:false,
+    Mutable:false,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+},
+{
+    label:'CantidadUnitaria',
+    name:'CantidadUnitaria',
+    TipoDato:'Number',
+    TipoConjuntoDatos:'Original',
+    EsFuncion:false,
+    Mutable:false,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+},
+{
+    label:'Cajas',
+    name:'Cajas',
+    TipoDato:'Number',
+    TipoConjuntoDatos:'Original',
+    EsFuncion:false,
+    Mutable:false,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+},
+{
+    label:'FactorConversion',
+    name:'FactorConversion',
+    TipoDato:'Number',
+    TipoConjuntoDatos:'Original',
+    EsFuncion:false,
+    Mutable:false,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+},
+{
+    label:'Factor',
+    name:'Factor',
+    TipoDato:'Number',
+    TipoConjuntoDatos:'Original',
+    EsFuncion:false,
+    Mutable:false,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+},
+{
+    label:'NumPedido',
+    name:'NumPedido',
+    TipoDato:'Number',
+    TipoConjuntoDatos:'Original',
+    EsFuncion:false,
+    Mutable:true,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+},
+{
+    label:'PKIDProveedor',
+    name:'PKIDProveedor',
+    TipoDato:'Number',
+    TipoConjuntoDatos:'Original',
+    EsFuncion:false,
+    Mutable:true,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+},
+{
+    label:'Anio',
+    name:'Anio',
+    TipoConjuntoDatos:'Original',
+    TipoDato:'Number',
+    EsFuncion:true,
+    Mutable:true,
+    Tabla:'CuboProyeccion',
+    TablaLabel:'Cubo Proyeccion',
+    Origen:'ColumnasCubos'
+
+},
 ]

@@ -1,14 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
-import { Button, Card, Collapse, Drawer, Input, Layout, message, Modal, notification, Segmented, Space, Spin, Splitter, Tag, theme, Typography } from 'antd';
+import { Button, Card, Collapse, Drawer, Dropdown, Input, Layout, message, Modal, notification, Segmented, Space, Spin, Splitter, Tag, theme, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { ArrowLeftOutlined, ArrowRightOutlined, BarChart, EditOutlined, Filter2Outlined, FilterAltOutlined, FilterOutlined, KeyboardArrowLeftOutlined, KeyboardArrowRightOutlined, List, ListAltRounded, RefreshOutlined, SearchOutlined, X } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { IoArrowUndoSharp, IoClose, IoCube } from "react-icons/io5";
 import { IoArrowUndo } from "react-icons/io5";
 import { CgDuplicate } from "react-icons/cg";
-import { Inject, PivotChart, PivotViewComponent } from '@syncfusion/ej2-react-pivotview';
+import { ConditionalFormatting, FieldList, Inject, PivotChart, PivotViewComponent } from '@syncfusion/ej2-react-pivotview';
 import { SlOptionsVertical } from "react-icons/sl";
+import { TbSum } from "react-icons/tb";
 
 import { IoArrowRedo } from "react-icons/io5";
 import { DragDropContext,Droppable,Draggable } from 'react-beautiful-dnd'
@@ -29,7 +30,7 @@ import DropDrag from './components/WrapperReactGrid';
 import TituloSecundario1 from './components/TituloSecundario1';
 import { setValue } from '@syncfusion/ej2-base';
 import axios from 'axios';
-import { MdOutlineDragIndicator } from "react-icons/md";
+import { MdOutlineDragIndicator, MdOutlineFormatColorFill } from "react-icons/md";
 import CuboElementoLayout from './components/CuboElementoLayout';
 import SplitPane,{Pane} from 'react-split-pane';
 import { ConjuntoData } from './data/EjemploConjuntoData';
@@ -63,14 +64,27 @@ const initialLayout = [0, 1, 2, 3, 4].map((i) => ({
 }));
 const pivotRefs = useRef([]);
 // Estado inicial para items y el contador
-const [items, setItems] = useState([  { i: `pivot1-Bubble`, x: 0, y: 0, w: 4, h: 4,minW:4,minH:4 },
-  { i: `pivot2-Table`, x: 4, y: 0, w: 4, h: 4,minW:4,minH:4 }]
+const [items, setItems] = useState([  { i: `pivot1-Bubble`, x: 0, y: 0, w: 4, h: 4,minW:4,minH:4,selected:true,dataSourceSettings:{},Title:'' },
+  { i: `pivot2-Table`, x: 4, y: 0, w: 4, h: 4,minW:4,minH:4,selected:false,dataSourceSettings:{},Title:'' }]
   // { i: "pivot1", x: 0, y: 0, w: 4, h:4,  minW: 4,
   //   minH: 4 },
   // { i: "pivot2", x: 4, y: 0, w: 4, h: 4,  minW: 4,
   //   minH: 4 },
   // Puedes añadir más configuraciones de layout aquí
 );
+const [itemsSelected,SetItemsSelected] = useState(['pivot1-Bubble'])
+const [SettingsItems,SetSettingsItems] = useState([
+  {
+    itemID:`pivot1-Bubble`,
+    dataSourceSettings:{},
+    Title:''
+  },
+  {
+    itemID:`pivot2-Table`,
+    dataSourceSettings:{},
+    Title:''
+  },
+])
 const [DrawerPosicion,SetDrawerPosicion] = useState(false)
 
 const [newCounter, setNewCounter] = useState(0);
@@ -94,46 +108,120 @@ const [cols, setCols] = useState(defaultCols);
   const [PanelColumnas,SetPanelColumnas] = useState([])
   const [ModalLoading,SetModalLoading] = useState(false)
   const [PanelValores,SetPanelValores] = useState([])
+ 
   const [HiddenPanelGraficos,SetHiddenPanelGraficos] = useState(false)
   const [valueSegmentedfx1, setValuevalueSegmentedfx1] = useState('Editor');
   const [FiltrosOpened,setFiltrosOpened] = useState(false)
-  const openNotificationWithIcon = (type,msg,desc) => {
-    api[type]({
-      duration:8,
-      message: msg,
-      description:desc
-    });
-  };
   const [activeKey, setActiveKey] = useState(null);
   const itemRefs = useRef({});
 
 
-  const onLayoutChange = (newLayout) => {
-    console.log(newLayout);
-  
-    // Actualiza el estado de items con los nuevos valores del layout
-    const updatedItems = items.map(item => {
-      const layoutItem = newLayout.find(l => l.i === item.i);
+  const onLayoutChange = (layout) => {
+    // console.log(layout)
+    // console.log(itemsSelected)
+    const newLayout = layout.map(x=>{
+      if(itemsSelected.includes(x.i))
+      {
+        return {...x,selected:true}
+      }
+      else{
+        return {...x,selected:false}
+      }
+    })
+    // console.log(SettingsItems)
+    const newLayout2 = newLayout.map(x=>{
+      if(SettingsItems.map(x=>x.itemID).includes(x.i))
+      {
+       
+        return {...x,
+          dataSourceSettings:SettingsItems.find(y=>y.itemID===x.i).dataSourceSettings,
+          Title:SettingsItems.find(y=>y.itemID===x.i).Title,
+        }
+      }
+     else{
+      return {...x,dataSourceSettings:{},Title:''}
+
+     }
       
-      
-      return layoutItem
-        ? {
-            ...item,
-            x: layoutItem.x,
-            y: layoutItem.y,
-            w: layoutItem.w,
-            h: layoutItem.h,
-          }
-        : item; // Si no encuentra el item en el layout, deja el item sin cambios
-    });
-    console.log('ACTUALIZADO')
-    console.log(updatedItems)
-   
-    setItems(updatedItems);  // Actualiza los items con los nuevos valores
+    })
+    // console.log(newLayout2)
+    setItems(newLayout2)
    
   };
+  const ConfigurarFilterDrill = (e)=>{
+    console.log(e)
+  }
+  const addItemToSelectedItems = (id) => {
 
- 
+    message.info(id);
+  
+    // Establecer el id seleccionado en el array; si ya está seleccionado, lo mantenemos, si no, lo actualizamos
+    const newSelected = [id]; // Solo se permite un solo seleccionado
+  
+    // Actualizar el layout, marcando como seleccionado solo el elemento actual
+    const newLayout = items.map(x => ({
+      ...x,
+      selected: x.i === id // Marcar como seleccionado si el id coincide
+    }));
+    console.log('NO SE DEBERIA RENDERIZAR ESTO')
+    console.log(newLayout);
+  
+    // Actualizar el estado con el nuevo layout y el único id seleccionado
+    setItems(newLayout);
+    SetItemsSelected(newSelected); // Solo un id seleccionado
+  };
+  const addDataSourceSettings = (id,selectedDataSourceSettings)=>{
+    console.log(id)
+    console.log(selectedDataSourceSettings)
+    const idselected = id[0]
+    const nuevo = SettingsItems.map(x=>{
+      if(x.itemID===idselected)
+      {
+        return {...x,dataSourceSettings:selectedDataSourceSettings}
+      }
+      else{
+        return {...x,dataSourceSettings:{}}
+      }
+    })
+    console.log(nuevo)
+    const nuevoLayout = items.map(x=>({
+      ...x,
+      dataSourceSettings:nuevo.map(x=>x.itemID).includes(x.i).dataSourceSettings
+    }))
+    SetSettingsItems(nuevo)
+    setItems(nuevoLayout);
+  
+  }
+  // const addItemToSelectedItems = (id) => {
+  //   message.info(id);
+  
+  //   // Convertir el array actual a un Set para gestionar seleccionados sin duplicados
+  //   const actualSet = new Set(itemsSelected);
+  
+  //   // Verificar si el elemento ya está seleccionado
+  //   if (actualSet.has(id)) {
+  //     // Si ya está, lo removemos (deseleccionamos)
+  //     actualSet.delete(id);
+  //   } else {
+  //     // Si no está, lo agregamos (seleccionamos)
+  //     actualSet.add(id);
+  //   }
+  
+  //   // Convertimos el Set a un array para actualizar el estado
+  //   const actualArray = Array.from(actualSet);
+  
+  //   // Actualizamos el layout, cambiando el estado de seleccionado según los seleccionados
+  //   const newLayout = items.map(x => ({
+  //     ...x,
+  //     selected: actualSet.has(x.i) // Si el item está en el set, lo marcamos como seleccionado
+  //   }));
+  
+  //   console.log(newLayout);
+  
+  //   // Actualizamos el estado con el nuevo layout y la lista de seleccionados
+  //   setItems(newLayout);
+  //   SetItemsSelected(actualArray);
+  // };
   
   function chartOnLoad(args) {
     let selectedTheme = 'Material';
@@ -149,489 +237,117 @@ const [cols, setCols] = useState(defaultCols);
   
 const onRemoveItem = (i) => {
   console.log("removing", i);
-  setItems(items.filter(item => item.i !== i));
+  const itEl = SettingsItems.filter(item=>item.itemID!==i)
+    SetSettingsItems(itEl)
+    if(itEl.length!==0)
+    {
+      const nItem = SettingsItems.filter(item=>item.itemID!==i)[0].itemID
+      console.log(nItem)
+      console.log([nItem])
+      SetItemsSelected([nItem])
+    }
+    if(itEl.length===0)
+    {
+      SetItemsSelected(itEl)
+    }
+    
+    setItems(items.filter(item => item.i !== i));
+  
+  
 };
+// useEffect(() => {
+//   console.log(DatosCalculo)
+// }, [DatosCalculo])
 
-
-// const CreateElement = () => {
-
-
-
-//   return items.map((item,index)=>
-//     <div key={item.i} data-grid={item} 
-//     style={{borderWidth:'1px'}}
-//     className='col'
-    
-//     >
-      
-//     <div className='row gx-0 my-1'>
-
-//       <div className='d-flex col-2 '>
-//       <IconButton size='small'  className='react-grid-dragHandleExample'>
-//         <MdOutlineDragIndicator/>
-//       </IconButton>
-//       <IconButton
-//         size='small' 
-//           className="add text"
-//           onClick={()=>{onAddItem(item.TypeChart)}}
-         
-//         >
-          
-//           <CgDuplicate />
-  
-//         </IconButton>
-//       </div>
-  
-       
-    
-//         <div className='d-flex col-8' >
-
-//       <h5 className='text-truncate py-1'>{JSON.stringify(item.TypeChart)}</h5>
-//       </div>
-
-//       <div className='d-flex justify-content-end col-2' >
-//       <IconButton size='small' >
-//         <SlOptionsVertical/>
-//       </IconButton>
-//       <IconButton size='small'   className="remove" onClick={() => onRemoveItem(item.i)}>
-//         <IoClose/>
-//       </IconButton>
-//       </div>
-//       </div>
-//      <div className='row gx-0'>
-      
-//       <PivotViewComponent 
-//           id={item.i}
-          
-//           key={item.i.toString()}
-//           ref={pivotRefs.current[index]}
-//           chartSettings={{ chartSeries: { type: 'Bubble' }}}
-//           displayOption={{ view: 'Chart'}}
-//           dataSourceSettings={{
-                
-//                 enableSorting: true,
-//                 rows: [{ name: 'Year' }, { name: 'Order_Source', caption: 'Order Source' }],
-//                 columns: [{ name: 'Country' }, { name: 'Products' }],
-//                 valueSortSettings: { headerDelimiter: ' - ' },
-//                 dataSource: [{
-//                   "In_Stock": 34,
-//                   "Sold": 51,
-//                   "Amount": 383,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Retail Outlets",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q1"
-//               },
-//               {
-//                   "In_Stock": 4,
-//                   "Sold": 423,
-//                   "Amount": 3595.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Sales Person",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q1"
-//               },
-//               {
-//                   "In_Stock": 38,
-//                   "Sold": 234,
-//                   "Amount": 1813.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Teleshopping",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q1"
-//               },
-//               {
-//                   "In_Stock": 42,
-//                   "Sold": 127,
-//                   "Amount": 952.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "App Store",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q1"
-//               },
-//               {
-//                   "In_Stock": 36,
-//                   "Sold": 89,
-//                   "Amount": 668,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Retail Outlets",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q2"
-//               },
-//               {
-//                   "In_Stock": 17,
-//                   "Sold": 340,
-//                   "Amount": 2890,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Sales Person",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q2"
-//               },
-//               {
-//                   "In_Stock": 22,
-//                   "Sold": 379,
-//                   "Amount": 2937.25,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Teleshopping",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q2"
-//               },
-//               {
-//                   "In_Stock": 12,
-//                   "Sold": 269,
-//                   "Amount": 2017.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "App Store",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q2"
-//               },
-//               {
-//                   "In_Stock": 28,
-//                   "Sold": 15,
-//                   "Amount": 113,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Retail Outlets",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q3"
-//               },
-//               {
-//                   "In_Stock": 46,
-//                   "Sold": 369,
-//                   "Amount": 3136.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Sales Person",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q3"
-//               },
-//               {
-//                   "In_Stock": 16,
-//                   "Sold": 410,
-//                   "Amount": 3177.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Teleshopping",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q3"
-//               },
-//               {
-//                   "In_Stock": 18,
-//                   "Sold": 99,
-//                   "Amount": 742.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "App Store",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q3"
-//               },
-//               {
-//                   "In_Stock": 50,
-//                   "Sold": 50,
-//                   "Amount": 375.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Retail Outlets",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q4"
-//               },
-//               {
-//                   "In_Stock": 31,
-//                   "Sold": 129,
-//                   "Amount": 1096.5,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Sales Person",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q4"
-//               },
-//               {
-//                   "In_Stock": 23,
-//                   "Sold": 404,
-//                   "Amount": 3131,
-//                   "Country": "France",
-//                   "Product_Categories": "Accessories",
-//                   "Products": "Bottles and Cages",
-//                   "Order_Source": "Teleshopping",
-//                   "Year": "FY 2015",
-//                   "Quarter": "Q4"
-//               }],
-//                 expandAll: false,
-//                 drilledMembers: [{ name: 'Year', items: ['FY 2015'] }],
-//                 formatSettings: [{ name: "Amount", format: "C" }],
-//                 values: [{ name: "Amount", caption: "Sales Amount" }],
-//                 filters: []
-//           }} 
-//            height={`${item.h*100}`}
-//        width={`${item.w*100}`}
-//       >
-//           <Inject services={[PivotChart]}/>
-//         </PivotViewComponent>
-     
-//       </div>
-//     </div>
-//     )
-// };
 const CreateElement = (el,index) => {
-  const typechart = el.i.substring(el.i.indexOf('-')+1,el.i.length)
-  
-  // message.info(typechart)
-  return (<div key={el.i} data-grid={el} 
-    style={{borderWidth:'1px'}}
-    className='col'
-    
-    >
-      
-    <div className='row gx-0 my-1'>
-
-      <div className='d-flex col-2 '>
-      <IconButton size='small'  className='react-grid-dragHandleExample'>
-        <MdOutlineDragIndicator/>
-      </IconButton>
-      <IconButton
-        size='small' 
-          className="add text"
-          onClick={()=>{onAddItem(el.i)}}
-         
+  if(SettingsItems.find(x=>x.itemID===el.i))
+  {
+    const typechart = el.i.substring(el.i.indexOf('-')+1,el.i.length)
+    console.log(typechart)
+    const dt = SettingsItems.find(x=>x.itemID===el.i).dataSourceSettings 
+    console.log(dt)
+      return (<div key={el.i} data-grid={el} 
+        style={{borderWidth:'1px',borderColor:el.selected?'#3da6fb':'#dedede'}}
+        className='col'
+        onClick={()=>{addItemToSelectedItems(el.i)}}
         >
           
-          <CgDuplicate />
-  
-        </IconButton>
-      </div>
-  
-       
+        <div className='row gx-0 my-1'>
     
-        <div className='d-flex col-8' >
-
-      <h5 className='text-truncate py-1'>{typechart}</h5>
-      </div>
-
-      <div className='d-flex justify-content-end col-2' >
-      <IconButton size='small' >
-        <SlOptionsVertical/>
-      </IconButton>
-      <IconButton size='small'   className="remove" onClick={() => onRemoveItem(el.i)}>
-        <IoClose/>
-      </IconButton>
-      </div>
-      </div>
-     <div className='row gx-0'>
+          <div className='d-flex col-2 '>
+          <IconButton size='small'  className='react-grid-dragHandleExample'>
+            <MdOutlineDragIndicator/>
+          </IconButton>
+          {/* <IconButton
+            size='small' 
+              className="add text"
+              onClick={()=>{onAddItem(typechart)}}
+             
+            >
+              
+              <CgDuplicate />
       
-      <PivotViewComponent 
-          id={el.i}
+            </IconButton> */}
+          </div>
+      
+           
+        
+            <div className='d-flex col-8' >
+    
+          <h5 className='text-truncate py-1'>{el.Title}</h5>
+          </div>
+    
+          <div className='d-flex justify-content-end col-2' >
+            <Dropdown
+             menu={{
+              items:[
+                // {
+                //   label:'Incluir y Excluir filas',
+                //   key:'IncludeExclude'
+                // }
+              ],
+              onClick:(e)=>{ ConfigurarFilterDrill(e)},
+            }}
+            trigger={['click']}
+            >
+          <IconButton size='small' >
+            <SlOptionsVertical/>
+            
+          </IconButton>
+          </Dropdown>
+          <IconButton size='small'   className="remove" onClick={(event) =>
+          {
+             event.stopPropagation();
+             onRemoveItem(el.i)
+          }
+             }>
+            <IoClose/>
+          </IconButton>
+          </div>
+          </div>
+         <div className='row gx-0'>
           
-          key={el.i.toString()}
-          ref={pivotRefs.current[index]}
-          chartSettings={{ chartSeries: { type: typechart}}}
-          displayOption={{ view: typechart==='Table'?'Table':'Chart'}}
-          dataSourceSettings={{
-                
-                enableSorting: true,
-                rows: [{ name: 'Year' }, { name: 'Order_Source', caption: 'Order Source' }],
-                columns: [{ name: 'Country' }, { name: 'Products' }],
-                valueSortSettings: { headerDelimiter: ' - ' },
-                dataSource: [{
-                  "In_Stock": 34,
-                  "Sold": 51,
-                  "Amount": 383,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Retail Outlets",
-                  "Year": "FY 2015",
-                  "Quarter": "Q1"
-              },
-              {
-                  "In_Stock": 4,
-                  "Sold": 423,
-                  "Amount": 3595.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Sales Person",
-                  "Year": "FY 2015",
-                  "Quarter": "Q1"
-              },
-              {
-                  "In_Stock": 38,
-                  "Sold": 234,
-                  "Amount": 1813.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Teleshopping",
-                  "Year": "FY 2015",
-                  "Quarter": "Q1"
-              },
-              {
-                  "In_Stock": 42,
-                  "Sold": 127,
-                  "Amount": 952.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "App Store",
-                  "Year": "FY 2015",
-                  "Quarter": "Q1"
-              },
-              {
-                  "In_Stock": 36,
-                  "Sold": 89,
-                  "Amount": 668,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Retail Outlets",
-                  "Year": "FY 2015",
-                  "Quarter": "Q2"
-              },
-              {
-                  "In_Stock": 17,
-                  "Sold": 340,
-                  "Amount": 2890,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Sales Person",
-                  "Year": "FY 2015",
-                  "Quarter": "Q2"
-              },
-              {
-                  "In_Stock": 22,
-                  "Sold": 379,
-                  "Amount": 2937.25,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Teleshopping",
-                  "Year": "FY 2015",
-                  "Quarter": "Q2"
-              },
-              {
-                  "In_Stock": 12,
-                  "Sold": 269,
-                  "Amount": 2017.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "App Store",
-                  "Year": "FY 2015",
-                  "Quarter": "Q2"
-              },
-              {
-                  "In_Stock": 28,
-                  "Sold": 15,
-                  "Amount": 113,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Retail Outlets",
-                  "Year": "FY 2015",
-                  "Quarter": "Q3"
-              },
-              {
-                  "In_Stock": 46,
-                  "Sold": 369,
-                  "Amount": 3136.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Sales Person",
-                  "Year": "FY 2015",
-                  "Quarter": "Q3"
-              },
-              {
-                  "In_Stock": 16,
-                  "Sold": 410,
-                  "Amount": 3177.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Teleshopping",
-                  "Year": "FY 2015",
-                  "Quarter": "Q3"
-              },
-              {
-                  "In_Stock": 18,
-                  "Sold": 99,
-                  "Amount": 742.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "App Store",
-                  "Year": "FY 2015",
-                  "Quarter": "Q3"
-              },
-              {
-                  "In_Stock": 50,
-                  "Sold": 50,
-                  "Amount": 375.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Retail Outlets",
-                  "Year": "FY 2015",
-                  "Quarter": "Q4"
-              },
-              {
-                  "In_Stock": 31,
-                  "Sold": 129,
-                  "Amount": 1096.5,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Sales Person",
-                  "Year": "FY 2015",
-                  "Quarter": "Q4"
-              },
-              {
-                  "In_Stock": 23,
-                  "Sold": 404,
-                  "Amount": 3131,
-                  "Country": "France",
-                  "Product_Categories": "Accessories",
-                  "Products": "Bottles and Cages",
-                  "Order_Source": "Teleshopping",
-                  "Year": "FY 2015",
-                  "Quarter": "Q4"
-              }],
-                expandAll: false,
-                drilledMembers: [{ name: 'Year', items: ['FY 2015'] }],
-                formatSettings: [{ name: "Amount", format: "C" }],
-                values: [{ name: "Amount", caption: "Sales Amount" }],
-                filters: []
-          }} 
-           height={`${el.h*100}`}
-       width={`${el.w*100}`}
-      >
-          <Inject services={[PivotChart]}/>
-        </PivotViewComponent>
-     
-      </div>
-    </div>)
+          <PivotViewComponent 
+              id={el.i}
+              
+              key={el.i.toString()}
+              ref={pivotRefs.current[index]}
+              chartSettings={{ chartSeries: { type: typechart}}}
+              displayOption={{ view: typechart==='Table'?'Table':'Chart'}}
+              dataSourceSettings={dt}
+              allowConditionalFormatting={true}
+  
+               height={`${el.h*100}`}
+           width={`${el.w*100}`}
+          >
+              <Inject services={[PivotChart,FieldList,ConditionalFormatting]}/>
+            </PivotViewComponent>
+         
+          </div>
+        </div>)
+  }
+  
+  
     
 };
 
@@ -640,11 +356,11 @@ const onBreakpointChange = (breakpoint, cols) => {
   console.log(cols)
 
 
-  message.info('sucedio')
+  // message.info('sucedio')
   setCols(cols);
 };
 const onAddItem = (TypeChart) => {
-
+  console.log(TypeChart)
   setItems([
     ...items,
     {
@@ -653,7 +369,10 @@ const onAddItem = (TypeChart) => {
       y: Infinity, // lo pone al final
       w: 4,
       h: 4,
-    
+      selected:false,
+      dataSourceSettings:{},
+      Title:'',
+
       // KindChart:KindChart,
       // FamilyChart:FamilyChart,
       minW:  4, 
@@ -661,16 +380,17 @@ const onAddItem = (TypeChart) => {
       
     }
   ]);
-  
+  SetSettingsItems([
+    ...SettingsItems,
+    {
+      itemID:`pivot${SettingsItems.length+1}-${TypeChart}`,
+      dataSourceSettings:{},
+      Title:''
+    },
+
+  ])
 };
-const onAddColumns = (name)=>{
-    SetPanelColumnas([
-      ...PanelColumnas,{
-        name:name,
-        value:name
-      }
-    ])
-}
+
 
   const SetValueNavigatorPanel = (value)=>{
     setValuevalueSegmentedfx1(value)
@@ -683,10 +403,10 @@ const onAddColumns = (name)=>{
       maxHeight:'100%'
     }}>
       {contextHolder}
-      <header className="navbar sticky-top  flex-md-nowrap p-0 py-1 shadow" style={{background:'#000000'}}>
-      <Space className='d-flex align-items-center'>
-      <Title level={4} style={{ color: 'white', padding: '10px' , marginBottom:'0px' }}>4Dimension</Title>
-      <div style={{borderWidth:'3px',borderColor:'#FFFFFF'}}>
+      <header className="navbar sticky-top  flex-md-nowrap p-0 py-1 shadow" style={{background:'#40444b'}}>
+      <Space className='d-flex align-items-center mx-4 my-1 px-2' style={{background:'#5ab3fb',borderRadius:'2px' ,borderColor:'#bad1f2',borderWidth:'0.1px'}}>
+      <Title  level={4} style={{ color: 'white', padding: '10px' , marginBottom:'0px' }}>4Dimension</Title>
+      <div className='px-1' style={{borderWidth:'3px',borderColor:'#bad1f2'}}>
       <IoMdCube style={{color:'#FFFFFF'}}/>  
       </div>
       </Space>
@@ -702,44 +422,11 @@ const onAddColumns = (name)=>{
     <Spin/>
 </Modal>
     <div className='container-fluid'>
-      {/* <div className='row'>
-        <Space style={{background:'#e8edf7'}} className='p-2'>
-          <Typography>ELEMENTO 1</Typography>
-          <Typography>ELEMENTO 2</Typography>
-          <Typography>ELEMENTO 3</Typography>
-          <Typography>ELEMENTO 4</Typography>
-          <Typography>ELEMENTO 5</Typography>
-        </Space>
-      </div>
-      <div className='row'>
-        <Space style={{background:'#e8edf7',borderTopWidth:'1px',borderColor:'#adadad'}} className='p-2'>
-          <IconButton className='mx-2' size='small'>
-            <IoArrowUndoSharp/>
-          </IconButton>
-          <IconButton className='mx-2' size='small'>
-            <IoArrowRedo/>
-          </IconButton>
-          <IconButton className='mx-2' size='small'>
-            <FaSave/>
-          </IconButton>
-          <IconButton className='mx-2' size='small'>
-            <RefreshOutlined/>
-          </IconButton>
-        </Space>
-      </div> */}
       <Drawer open={DrawerPosicion}
       onClose={()=>{SetDrawerPosicion(false)}}
       >
         <Card>
-          {items.map(x=>{
-            return(
-              <div>
-                
-                {isNaN(cols)?cols.lg:cols } = 
-                { x.i}= {x.x} + {x.y} + {x.w} + {x.h} + TamañoRealLargo: {x.h*100} + TamañoAncho: {x.w*100}
-              </div>
-            )
-          })}
+          
         </Card>
       </Drawer>
       <div className='d-flex row vh-100' style={{borderTopWidth:'1px',borderColor:'#adadad'}}>
@@ -765,17 +452,17 @@ const onAddColumns = (name)=>{
           </div>
           <div className='row p-1' style={{borderRadius:'1px',backgroundColor:'#FFFFFF',borderColor:'#CACACA',borderWidth:'0.2px'}}>
           <IconButton style={{borderRadius:'1px'}}  onClick={()=>{SetValueNavigatorPanel('Filtros')}}>
-                <FilterAltOutlined/>
+                <FilterAltOutlined />
               </IconButton>
           </div>
           <div className='row p-1' style={{borderRadius:'1px',backgroundColor:'#FFFFFF',borderColor:'#CACACA',borderWidth:'0.2px'}}>
           <IconButton style={{borderRadius:'1px'}} size='small' onClick={()=>{SetValueNavigatorPanel('Formato')}}>
-                <SettingOutlined/>
+                <MdOutlineFormatColorFill />
               </IconButton>
           </div>
           <div className='row p-1' style={{borderRadius:'1px',backgroundColor:'#FFFFFF',borderColor:'#CACACA',borderWidth:'0.2px'}}>
           <IconButton  onClick={()=>{SetHiddenPanelGraficos(!HiddenPanelGraficos)}} style={{borderRadius:'1px'}}>
-                <BarChart/>
+                <BarChart />
               </IconButton>
           </div>
         </div>
@@ -784,6 +471,13 @@ const onAddColumns = (name)=>{
         {/* PANEL DE CUBO */}
         
        <Panel
+       items = {items}
+       setItems={setItems}
+       SetSettingsItems={SetSettingsItems}
+        SettingsItems={SettingsItems}
+       itemsSelected={itemsSelected}
+       addDataSourceSettings={addDataSourceSettings}
+       SetDatosCalculo={SetDatosCalculo}
        SetHiddenPanelElementosCDatos={SetHiddenPanelElementosCDatos}
        HiddenPanelElementosCDatos={HiddenPanelElementosCDatos}
        setValuevalueSegmentedfx1={setValuevalueSegmentedfx1}
@@ -803,7 +497,8 @@ const onAddColumns = (name)=>{
            <ResponsiveReactGridLayout
            
                   draggableHandle=".react-grid-dragHandleExample"
-                  onLayoutChange={(newLayout) => setItems(newLayout)}
+                  // onLayoutChange={(newLayout) => setItems(newLayout)}
+                  onLayoutChange={onLayoutChange}
              onBreakpointChange={onBreakpointChange}
              layout={items}
              className="layout"
@@ -818,12 +513,12 @@ const onAddColumns = (name)=>{
         </div>
         {HiddenPanelGraficos?
         <div className='col px-0 aling-items-center justify-content-center'
-        style={{background:'#FFFFFF',maxWidth:'14rem',borderLeftWidth:'1px',borderColor:'#adadad'}}>
-   <div className='d-flex col aling-items-center justify-content-center mt-2'>
+        style={{background:'#9ab7e0',maxWidth:'14rem',borderLeftWidth:'1px',borderColor:'#4c5562'}}>
+   <div className='d-flex col aling-items-center justify-content-center py-2'>
         <IconButton style={{padding:'1px',marginRight:'16px'}} >
-           <FaChartBar size={16}/>
+           <FaChartBar color='#FFFFFF' size={18}/>
           </IconButton>
-          <TituloBarra1>Galeria de graficos</TituloBarra1>
+          <h6 style={{color:'#FFFFFF',fontSize:'14.5px',fontWeight:'bold'}}>Galeria de graficos</h6>
            </div>
 
           <div 
@@ -852,7 +547,7 @@ const onAddColumns = (name)=>{
                                                         borderRadius:1,
                                                         fontSize:'14px',
                                                         color:'#0d4178',
-                                                        
+                                                        height:'44px',
                                                         fontWeight:500,
                                                         borderWidth:'0.2px',
                                                         borderColor:'#a8a8a8',

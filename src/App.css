@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 /* .resizable {
     width: 200px;
     resize: horizontal;
@@ -17,6 +18,14 @@
     cursor: ew-resize; 
     background-color: #ccc;
   } */
+  .ant-modal .ant-modal-content {
+    border-radius: 3px;
+  }
+   .xsd{
+    font-family: "Ubuntu", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+   }
    svg{
     width: 100%;
    }
@@ -25,11 +34,41 @@
     scrollbar-color: 'unset';
   
    }
-  :where(.css-dev-only-do-not-override-vryruh).ant-collapse-ghost >.ant-collapse-item >.ant-collapse-content >.ant-collapse-content-box {
+   .ant-layout, 
+  .ant-layout *
+   {
+       border-radius: 2px !important;
+   }
+   .ant-input-outlined{
+       border-radius: 2px !important;
+   }
+   .ant-select-selector{
+       border-radius: 2px !important;
+   }
+  .ant-collapse-ghost >.ant-collapse-item >.ant-collapse-content >.ant-collapse-content-box {
     padding-block: 0px;
 }
-:where(.css-dev-only-do-not-override-vryruh).ant-collapse .ant-collapse-content>.ant-collapse-content-box {
+.ant-collapse .ant-collapse-content>.ant-collapse-content-box {
   padding: 0px;
+}
+.ant-dropdown .ant-dropdown-menu, 
+.ant-dropdown-menu-submenu .ant-dropdown-menu
+{
+  background-color: rgb(236, 236, 236);
+  /* border-top-width: 1px;
+  border-color: darkgray; */
+  border-radius: 1px;
+  padding:0;
+}
+.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item, 
+.ant-dropdown-menu-submenu .ant-dropdown-menu .ant-dropdown-menu-item, 
+.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-submenu-title, 
+.ant-dropdown-menu-submenu .ant-dropdown-menu .ant-dropdown-menu-submenu-title
+{
+
+
+  border-color: darkgray;
+  border-radius: 1px;
 }
   html, body, #root {
     height: 100%;
